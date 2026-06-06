@@ -1,22 +1,22 @@
 # DEV Tools installer (EDUCATIONAL PURPOSE ONLY)
 
-Bash script for automated installation of **Docker**, **Docker Compose**, **Python 3.9+**, and **Django** on Ubuntu 24-26.
+Bash script for automated installation of **Docker**, **Docker Compose**, **Python 3.9+**, and **Django** on Debian/Ubuntu.
 
 ---
 
 ## Files
 
-| File                          | Purpose                                  |
-| ----------------------------- | ---------------------------------------- |
-| `install_dev_tools.sh`        | Main installer script                    |
-| `Test.DevTools.Dockerfile`    | Isolated test environment (Ubuntu 24.04) |
-| `devtools.entrypoint.sh`      | Runs when the container starts           |
+| File                       | Purpose                                  |
+| -------------------------- | ---------------------------------------- |
+| `install_dev_tools.sh`     | Main installer script                    |
+| `Test.DevTools.Dockerfile` | Isolated test environment (Ubuntu 24.04) |
+| `devtools.entrypoint.sh`   | Runs when the container starts           |
 
 ---
 
 ## Requirements
 
-- Ubuntu 24.x - 26.x
+- Debian/Ubuntu
 - Root privileges (`sudo`)
 - Internet access
 
@@ -24,16 +24,38 @@ Bash script for automated installation of **Docker**, **Docker Compose**, **Pyth
 
 ## Usage
 
-```bash
-chmod +x install_dev_tools.sh
-sudo ./install_dev_tools.sh
-```
-
-After installation, activate the Django virtual environment:
+### Save and Run
 
 ```bash
-source /opt/django-env/bin/activate
+nano install-dev-tools.sh
+chmod +x install-dev-tools.sh
+./install-dev-tools.sh
 ```
+
+### Activate the Django Environment
+
+```bash
+source ~/django-env/bin/activate
+```
+
+### Installation Location
+
+The Python virtual environment is created in:
+
+```text
+~/django-env
+```
+
+After activation, all Python packages installed with `pip` will be isolated to this environment and will not affect the system Python installation.
+
+### Installed Components
+
+- Docker Engine
+- Docker Compose (v2)
+- Python 3
+- pip
+- Python virtual environment support (`venv`)
+- Django (installed inside `~/django-env`)
 
 ---
 
@@ -59,30 +81,19 @@ Build and run the installer inside an isolated container to avoid touching the h
 docker build -t dev-tools-test . -f Test.DevTools.Dockerfile
 
 # Start an interactive shell and inspect results
-docker run --rm --privileged -it dev-tools-test
+docker run --rm -it dev-tools-test
 ```
 
 ```text
 ==================================================================================
-  dev-tools-test container is ready      
+  dev-tools-test container is ready
 ==================================================================================
-  Docker : Docker version 29.5.2, build 79eb04c
-  Docker Compose : Docker Compose version v5.1.4
-  pip : pip 26.1.2 from /opt/django-env/lib/python3.12/site-packages/pip (python 3.12)
+  Docker : Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2
+  Docker Compose : Docker Compose version 2.40.3+ds1-0ubuntu1~24.04.1
+  pip : pip 26.1.2 from /root/django-env/lib/python3.12/site-packages/pip (python 3.12)
   Python : 3.12.3
-  Django : 6.0.5
+  Django : 6.0.6
 
 
-  Activate the venv:  source /opt/django-env/bin/activate
+  Activate the venv:  source /root/django-env/bin/activate
 ```
-
-> `--privileged` is required for the test container only (Docker-in-Docker).  
-> It is **not** needed when running the script directly on a host machine.
-
----
-
-## Key design decisions
-
-- **`set -euo pipefail`** — the script exits immediately on any error, unset variable, or failed pipe.
-- **PEP 668 compliance** — Django is installed into `/opt/django-env` (venv) instead of the system interpreter, which Ubuntu 24+ marks as _externally managed_.
-- **`systemctl` stub in Test.DevTools.Dockerfile** — replaces the real systemctl with a no-op shim so service management calls do not block the container build.

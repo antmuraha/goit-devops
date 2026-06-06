@@ -2,7 +2,7 @@
 # devtools.entrypoint.sh — runs when the container starts
 # Prints an installation summary, then drops into an interactive shell.
 
-VENV_DIR="/opt/django-env"
+VENV_DIR="$HOME/django-env"
 DOCKER_VER=$(docker --version 2>/dev/null)
 DOCKER_COMPOSE_VER=$(docker compose version 2>/dev/null)
 PIP_VER=$("${VENV_DIR}/bin/python" -m pip --version 2>/dev/null)
