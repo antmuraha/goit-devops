@@ -2,9 +2,8 @@
 
 ## Prerequisites
 
-- Python 3.13+
+- Python 3.9+
 - PostgreSQL running locally
-- `uv` installed (https://github.com/astral-sh/uv)
 
 ---
 
@@ -13,14 +12,14 @@
 ### 1. Activate virtual environment
 
 ```bash
-uv venv
+python3 -m venv .venv
 source .venv/bin/activate
 ```
 
 ### 2. Install dependencies
 
 ```bash
-uv sync
+pip install -r requirements.txt
 ```
 
 ---
@@ -33,7 +32,10 @@ Export required variables before running the app:
 export POSTGRES_NAME=postgres
 export POSTGRES_USER=postgres
 export POSTGRES_PASSWORD=postgres
+# POSTGRES_HOST run Django with venv
 export POSTGRES_HOST=localhost
+# POSTGRES_HOST run Django with compose
+export POSTGRES_HOST=db
 export POSTGRES_PORT=5432
 ```
 
