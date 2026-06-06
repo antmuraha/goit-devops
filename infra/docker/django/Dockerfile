@@ -1,19 +1,21 @@
-FROM ghcr.io/astral-sh/uv:python3.13-alpine
+FROM python:3.14-slim
 
-# Set environment variables for Python
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-# ENV PYTHONPATH=/usr/src/app/.venv/bin
-ENV PATH="/app/.venv/bin:$PATH"
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY pyproject.toml uv.lock ./
+RUN apt-get update && apt-get install -y --no-install-recommends \
+	libpq-dev \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN uv sync --frozen --no-dev && \
-	python -c "import django; print(django.__version__)"
+COPY requirements.txt .
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY . /app
 
 EXPOSE 8000
-CMD ["uv", "run","python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
