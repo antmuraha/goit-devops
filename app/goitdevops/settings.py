@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-44^6gl(gnw$3x3_k#a!k@bei-pg6@+$5s!g13jiyan*c@-6xj(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-POSTGRES_DB = os.getenv('POSTGRES_NAME')
+POSTGRES_DB = os.getenv('POSTGRES_DB')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 
@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'goitdevops.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_NAME"),
+        "NAME": os.getenv("POSTGRES_DB"),
         "USER": os.getenv("POSTGRES_USER"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
         "HOST": os.getenv("POSTGRES_HOST"),

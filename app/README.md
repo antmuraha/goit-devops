@@ -29,7 +29,7 @@ pip install -r requirements.txt
 Export required variables before running the app:
 
 ```bash
-export POSTGRES_NAME=postgres
+export POSTGRES_DB=postgres
 export POSTGRES_USER=postgres
 export POSTGRES_PASSWORD=postgres
 # POSTGRES_HOST run Django with venv
