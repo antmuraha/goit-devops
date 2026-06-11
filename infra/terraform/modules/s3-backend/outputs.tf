@@ -11,7 +11,3 @@ output "bucket_arn" {
 output "bucket_url" {
   value = "https://${aws_s3_bucket.terraform_state.bucket}.s3.amazonaws.com"
 }
-
-output "dynamodb_table_name" {
-  value = aws_dynamodb_table.terraform_locks.name
-}

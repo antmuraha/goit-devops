@@ -4,11 +4,10 @@ terraform {
 }
 
 
-# Connect S3 and DynamoDB modules
+# Connect S3 backend module
 module "s3_backend" {
   source      = "./modules/s3-backend"
-  bucket_name = "goit-l5-bucket"
-  table_name  = "terraform-locks"
+  bucket_name = "goit-terraform-state-bucket"
 }
 
 # Connect VPC module

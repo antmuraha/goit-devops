@@ -26,7 +26,15 @@ output "public_route_table_id" {
   description = "ID of the public route table"
 }
 
-###### S3 and DynamoDB Outputs ######
+output "nat_gateway_id" {
+  value = module.vpc.nat_gateway_id
+}
+
+output "private_route_table_id" {
+  value = module.vpc.private_route_table_id
+}
+
+###### S3 Outputs ######
 
 output "s3_bucket_name" {
   value = module.s3_backend.bucket_name
@@ -38,10 +46,6 @@ output "s3_bucket_arn" {
 
 output "bucket_url" {
   value = module.s3_backend.bucket_url
-}
-
-output "dynamodb_table_name" {
-  value = module.s3_backend.dynamodb_table_name
 }
 
 ###### ECR Outputs ######
