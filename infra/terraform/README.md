@@ -6,19 +6,19 @@
 terraform/
 │
 ├── main.tf                  # Main file for defining resources and modules
-├── backend.tf               # Configuration for backend state (S3 + DynamoDB)
+├── backend.tf               # Configuration for backend state (S3)
 ├── outputs.tf               # General outputs of resources
 │
 ├── modules/                 # Directory with all modules
 │   │
-│   ├── s3-backend/          # Module for S3 and DynamoDB
+│   ├── s3-backend/          # Module for S3 backend
 │   │   ├── s3.tf            # Creation of S3 bucket
-│   │   ├── dynamodb.tf      # Creation of DynamoDB table
-│   │   ├── variables.tf     # Variables for S3 and DynamoDB
-│   │   └── outputs.tf       # Outputs for S3 bucket and DynamoDB table
+│   │   ├── variables.tf     # Variables for S3
+│   │   └── outputs.tf       # Outputs for S3 bucket
 │   │
 │   ├── vpc/                 # Module for VPC
 │   │   ├── vpc.tf           # Creation of VPC, subnets, and Internet Gateway
+│   │   ├── nat.tf           # Creation of NAT Gateway
 │   │   ├── routes.tf        # Routing configuration
 │   │   ├── variables.tf     # Variables for VPC
 │   │   └── outputs.tf       # Outputs for VPC resources
@@ -44,6 +44,6 @@ terraform/
 
 ## Modules
 
-- **s3-backend** - Manages S3 bucket for Terraform state and DynamoDB table for state locking.
+- **s3-backend** - Manages S3 bucket for Terraform state.
 - **vpc** - Creates VPC, public and private subnets, Internet Gateway, and route tables.
 - **ecr** - Creates an ECR repository with image scanning and outputs the repository URL for use in CI/CD or ECS.
