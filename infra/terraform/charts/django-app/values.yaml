@@ -1,0 +1,21 @@
+image:
+  repository: "<account_id>.dkr.ecr.us-east-1.amazonaws.com/lesson-7-ecr"
+  tag: "latest"
+
+service:
+  type: LoadBalancer
+  port: 80
+
+hpa:
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+env:
+  POSTGRES_HOST: db
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+
+secret:
+  POSTGRES_PASSWORD: ""
