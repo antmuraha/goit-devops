@@ -18,4 +18,4 @@ env:
   POSTGRES_USER: postgres
 
 secret:
-  POSTGRES_PASSWORD: ""
+  POSTGRES_PASSWORD: "VerySecretPassword"
