@@ -1,5 +1,5 @@
 image:
-  repository: "<account_id>.dkr.ecr.us-east-1.amazonaws.com/lesson-7-ecr"
+  repository: "<account_id>.dkr.ecr.us-east-1.amazonaws.com/lesson-9-ecr"
   tag: "latest"
 
 service:
