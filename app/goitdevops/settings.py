@@ -27,7 +27,7 @@ POSTGRES_DB = os.getenv('POSTGRES_DB')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 
-ALLOWED_HOSTS = ['*'] if IS_PRODUCTION else ['localhost', *os.getenv('ALLOWED_HOSTS', '').split(',')]
+ALLOWED_HOSTS = ['*'] if IS_PRODUCTION else os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
