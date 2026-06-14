@@ -12,6 +12,18 @@ spec:
       labels:
         app: django
     spec:
+      initContainers:
+        - name: django-migrations
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command:
+            - python
+            - manage.py
+            - migrate
+            - --noinput
+          envFrom:
+            - configMapRef:
+                name: django-config
+
       containers:
         - name: django
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -20,5 +32,3 @@ spec:
           envFrom:
             - configMapRef:
                 name: django-config
-            - secretRef:
-                name: django-secret

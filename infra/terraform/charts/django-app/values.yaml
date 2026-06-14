@@ -12,10 +12,10 @@ hpa:
   targetCPUUtilizationPercentage: 70
 
 env:
+  PRODUCTION: "True"
+  ALLOWED_HOSTS: "*"
   POSTGRES_HOST: db
   POSTGRES_PORT: "5432"
   POSTGRES_DB: postgres
   POSTGRES_USER: postgres
-
-secret:
-  POSTGRES_PASSWORD: ""
+  POSTGRES_PASSWORD: "VerySecretPassword"

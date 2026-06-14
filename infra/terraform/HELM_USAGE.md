@@ -176,3 +176,24 @@ Check the Secret:
 ```bash
 kubectl get secret django-secret -o yaml
 ```
+
+## 7. Destroy the Deployment Step-by-Step
+
+Uninstall the Helm release:
+
+```bash
+helm uninstall django-app
+```
+
+Check that all resources are removed:
+
+```bash
+kubectl get all
+kubectl get svc -A
+```
+
+Only after confirming that all resources are deleted, you can proceed to destroy the cluster with Terraform.
+
+```bash
+terraform destroy
+```
