@@ -23,10 +23,25 @@ terraform/
 │   │   ├── variables.tf     # Variables for VPC
 │   │   └── outputs.tf       # Outputs for VPC resources
 │   │
-│   └── ecr/                 # Module for ECR
-│       ├── ecr.tf           # Creation of ECR repository
-│       ├── variables.tf     # Variables for ECR
-│       └── outputs.tf       # Output ECR repository URL
+│   ├── ecr/                 # Module for ECR
+│   │   ├── ecr.tf           # Creation of ECR repository
+│   │   ├── variables.tf     # Variables for ECR
+│   │   └── outputs.tf       # Output ECR repository URL
+│   │
+│   └── eks/                 # Module for Kubernetes cluster
+│       ├── eks.tf           # Creation of the cluster
+│       ├── variables.tf     # Variables for EKS
+│       └── outputs.tf       # Outputs for EKS cluster
+│
+├── charts/
+│   └── django-app/
+│       ├── templates/
+│       │   ├── deployment.yaml
+│       │   ├── service.yaml
+│       │   ├── configmap.yaml
+│       │   └── hpa.yaml
+│       ├── Chart.yaml
+│       └── values.yaml     # ConfigMap зі змінними середовища
 │
 └── README.md                # Project documentation
 

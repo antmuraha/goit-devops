@@ -4,6 +4,8 @@ services:
             context: ./app
             dockerfile: ../infra/docker/django/Dockerfile
         environment:
+            PRODUCTION: ${PRODUCTION}
+            ALLOWED_HOSTS: ${ALLOWED_HOSTS}
             POSTGRES_HOST: ${POSTGRES_HOST}
             POSTGRES_PORT: ${POSTGRES_PORT}
             POSTGRES_DB: ${POSTGRES_DB}

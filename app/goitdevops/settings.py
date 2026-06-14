@@ -21,15 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-44^6gl(gnw$3x3_k#a!k@bei-pg6@+$5s!g13jiyan*c@-6xj('
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+IS_PRODUCTION = os.getenv('PRODUCTION', 'False') == 'True'
 
 POSTGRES_DB = os.getenv('POSTGRES_DB')
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'] if IS_PRODUCTION else os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
