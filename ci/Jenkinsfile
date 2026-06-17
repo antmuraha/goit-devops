@@ -104,7 +104,7 @@ spec:
               apk add --no-cache yq || true
 
               yq -i '.image.tag = strenv(IMAGE_TAG)' values.yaml
-              yq -i '.image.repository = strenv(ECR_REGISTRY) + "/" + strenv(IMAGE_NAME)' values.yaml
+              yq -i '.image.repository = strenv(ECR_REGISTRY)' values.yaml
 
               git config --global user.email "$COMMIT_EMAIL"
               git config --global user.name "$COMMIT_NAME"
