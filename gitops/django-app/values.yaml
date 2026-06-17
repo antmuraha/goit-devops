@@ -1,7 +1,6 @@
 image:
-  repository: "<account_id>.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
-  tag: "latest"
-
+  repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr/django-app"
+  tag: "b50434b"
 env:
   PRODUCTION: "True"
   ALLOWED_HOSTS: "*"
