@@ -1,24 +1,23 @@
 pipeline {
-  agent { kubernetes { yaml """
-  apiVersion: v1
-kind: Pod
-metadata:
-  labels:
-    some-label: jenkins-kaniko
-spec:
-  serviceAccountName: jenkins-sa
+  agent { 
+    kubernetes {
+      label 'kaniko-agent'
 
-  containers:
-  - name: jnlp
-    image: jenkins/inbound-agent:latest
+      containers {
+        containerTemplate(
+          name: 'jnlp',
+          image: 'jenkins/inbound-agent:latest'
+        )
 
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:v1.16.0-debug
-    command:
-      - sleep
-    args:
-      - 99d
-  """ } }
+        containerTemplate(
+          name: 'kaniko',
+          image: 'gcr.io/kaniko-project/executor:v1.16.0-debug',
+          command: 'cat',
+          ttyEnabled: true
+        )
+      }
+    }
+   }
 
   environment {
     COMMIT_EMAIL  = "jenkins@localhost"
