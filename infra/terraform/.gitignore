@@ -2,3 +2,4 @@
 plan.zip
 logs
 kubeconfig
+terraform.tfvars
