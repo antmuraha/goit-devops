@@ -6,12 +6,20 @@ pipeline {
       containers {
         containerTemplate(
           name: 'jnlp',
-          image: 'jenkins/inbound-agent:latest'
+          image: 'jenkins/inbound-agent:latest',
+          ttyEnabled: true
         )
 
         containerTemplate(
           name: 'kaniko',
           image: 'gcr.io/kaniko-project/executor:v1.16.0-debug',
+          command: 'cat',
+          ttyEnabled: true
+        )
+
+        containerTemplate(
+          name: 'git',
+          image: 'alpine/git:latest',
           command: 'cat',
           ttyEnabled: true
         )
@@ -47,10 +55,11 @@ pipeline {
         container('kaniko') {
           sh '''
             /kaniko/executor \
-              --context "$WORKSPACE/app" \
+              --context "$WORKSPACE" \
               --dockerfile "$WORKSPACE/infra/docker/django/Dockerfile" \
               --destination="$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG" \
-              --cache=true
+              --cache=true \
+              --skip-tls-verify
           '''
         }
       }
@@ -70,7 +79,7 @@ pipeline {
               REPO_DIR=$(basename "$GIT_REPO_URL" .git)
               git clone https://${GIT_USERNAME}:${GIT_PAT}@${GIT_REPO_URL#https://}
 
-              cd "$REPO_DIR/gitops/django-app"   # ← виправлений шлях
+              cd "$REPO_DIR/gitops/django-app"
 
               apk add --no-cache yq
               yq -i '.image.tag = "'"$IMAGE_TAG"'"' values.yaml
