@@ -67,7 +67,7 @@ spec:
             /kaniko/executor \
               --context "$WORKSPACE" \
               --dockerfile "$WORKSPACE/infra/docker/django/Dockerfile" \
-              --destination="$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG" \
+              --destination="$ECR_REGISTRY:$IMAGE_TAG" \
               --cache=true \
               --skip-tls-verify
           '''
