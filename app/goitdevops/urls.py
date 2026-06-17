@@ -22,7 +22,7 @@ def health(request):
     return JsonResponse({"status": "ok"})
 
 def debug(request):
-    return JsonResponse({"version": "1.0.0", "status": "ok"})
+    return JsonResponse({"version": "1.0.1", "status": "ok"})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
