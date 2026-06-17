@@ -23,8 +23,8 @@ spec:
           memory: "1Gi"
           cpu: "500m"
         limits:
-          memory: "3Gi"
-          cpu: "2"
+          memory: "2Gi"
+          cpu: "1"
 
     - name: git
       image: alpine/git
