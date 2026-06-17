@@ -5,7 +5,7 @@ applications:
     source:
       repoURL: https://github.com/antmuraha/goit-devops.git
       path: gitops/django-app
-      targetRevision: main
+      targetRevision: lesson-8-9
     destination:
       server: https://kubernetes.default.svc
       namespace: default
@@ -18,31 +18,3 @@ server:
   service:
     type: LoadBalancer
     port: 80
-# applications:
-#   - name: example-app
-#     namespace: default
-#     project: default
-#     source:
-#       repoURL: https://github.com/antmuraha/goit-devops.git
-#       path: infra/terraform/charts/django-app
-#       targetRevision: main
-#       helm:
-#         valueFiles:
-#           - values.yaml
-#     destination:
-#       server: https://kubernetes.default.svc
-#       namespace: default
-#     syncPolicy:
-#       automated:
-#         prune: true
-#         selfHeal: true
-
-# repositories:
-#   - name: example-app
-#     url: https://github.com/antmuraha/goit-devops.git
-#     username: YOUR_USERNAME
-#     password: YOUR_PASS
-
-# repoConfig:
-#   insecure: "true"
-#   enableLfs: "true"
