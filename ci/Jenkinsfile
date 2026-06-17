@@ -94,6 +94,10 @@ spec:
           ]) {
             sh '''
               REPO_DIR=$(basename "$GIT_REPO_URL" .git)
+              git config --global --add safe.directory /home/jenkins/agent/workspace/goit-django-docker
+
+              echo "Username: $GIT_USERNAME"
+              echo "PAT: ${GIT_PAT: -10}"
 
               git clone https://${GIT_USERNAME}:${GIT_PAT}@github.com/antmuraha/goit-devops.git
               git checkout lesson-8-9
@@ -104,8 +108,8 @@ spec:
               yq -i '.image.tag = strenv(IMAGE_TAG)' values.yaml
               yq -i '.image.repository = strenv(ECR_REGISTRY) + "/" + strenv(IMAGE_NAME)' values.yaml
 
-              git config user.email "$COMMIT_EMAIL"
-              git config user.name "$COMMIT_NAME"
+              git config --global user.email "$COMMIT_EMAIL"
+              git config --global user.name "$COMMIT_NAME"
 
               git add values.yaml
 
