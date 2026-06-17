@@ -95,8 +95,9 @@ spec:
             sh '''
               REPO_DIR=$(basename "$GIT_REPO_URL" .git)
               git clone https://${GIT_USERNAME}:${GIT_PAT}@${GIT_REPO_URL#https://}
-
-              cd "$REPO_DIR/gitops/django-app"
+              cd "$REPO_DIR/"
+              git checkout lesson-8-9
+              cd "gitops/django-app"
 
               apk add --no-cache yq
               yq -i '.image.tag = "'"$IMAGE_TAG"'"' values.yaml
