@@ -94,21 +94,26 @@ spec:
           ]) {
             sh '''
               REPO_DIR=$(basename "$GIT_REPO_URL" .git)
-              git clone https://${GIT_USERNAME}:${GIT_PAT}@${GIT_REPO_URL#https://}
-              cd "$REPO_DIR/"
-              git checkout lesson-8-9
-              cd "gitops/django-app"
 
-              apk add --no-cache yq
-              yq -i '.image.tag = "'"$IMAGE_TAG"'"' values.yaml
-              yq -i '.image.repository = "'"$ECR_REGISTRY/$IMAGE_NAME"'"' values.yaml
+              git clone https://${GIT_USERNAME}:${GIT_PAT}@github.com/antmuraha/goit-devops.git
+              git checkout lesson-8-9
+              cd goit-devops/gitops/django-app
+
+              apk add --no-cache yq || true
+
+              yq -i '.image.tag = strenv(IMAGE_TAG)' values.yaml
+              yq -i '.image.repository = strenv(ECR_REGISTRY) + "/" + strenv(IMAGE_NAME)' values.yaml
 
               git config user.email "$COMMIT_EMAIL"
-              git config user.name  "$COMMIT_NAME"
+              git config user.name "$COMMIT_NAME"
+
               git add values.yaml
+
               git diff --cached --quiet && echo "No changes" && exit 0
+
               git commit -m "ci: update image tag to $IMAGE_TAG"
-              git push origin main
+
+              git push https://${GIT_USERNAME}:${GIT_PAT}@github.com/antmuraha/goit-devops.git lesson-8-9
             '''
           }
         }
