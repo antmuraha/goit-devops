@@ -28,10 +28,17 @@ terraform/
 │   │   ├── variables.tf     # Variables for ECR
 │   │   └── outputs.tf       # Output ECR repository URL
 │   │
-│   └── eks/                 # Module for Kubernetes cluster
-│       ├── eks.tf           # Creation of the cluster
-│       ├── variables.tf     # Variables for EKS
-│       └── outputs.tf       # Outputs for EKS cluster
+│   ├── eks/                 # Module for Kubernetes cluster
+│   │   ├── eks.tf           # Creation of the cluster
+│   │   ├── variables.tf     # Variables for EKS
+│   │   └── outputs.tf       # Outputs for EKS cluster
+│   │
+│   └── jenkins/             # Module for Jenkins
+│       ├── jenkins.tf       # Creation of the Jenkins instance
+│       ├── variables.tf     # Variables for Jenkins
+│       ├── providers.tf     # Providers for Jenkins
+│       ├── values.yaml      # Values for Jenkins
+│       └── outputs.tf       # Outputs for Jenkins instance
 │
 ├── charts/
 │   └── django-app/

@@ -1,0 +1,100 @@
+controller:
+  admin:
+    # Don't hardcode credentials in production! Use Kubernetes secrets or external vaults instead.
+    # username: admin
+    # password: admin123
+
+  serviceType: LoadBalancer
+  servicePort: 80
+  service:
+    port: 80
+    targetPort: 8080
+
+  resources:
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+
+  persistentVolume:
+    enabled: true
+    storageClass: "ebs-sc"
+    size: 10Gi
+
+  controller:
+    env:
+      - name: ECR_REGISTRY
+        value: "${ecr_registry}"
+      - name: IMAGE_NAME
+        value: "django-app"
+      - name: GIT_REPO_URL
+        value: "https://github.com/antmuraha/goit-devops.git"
+
+  installPlugins:
+    - kubernetes:latest
+    - workflow-aggregator:latest
+    - git:latest
+    - configuration-as-code:latest
+    - credentials-binding:latest
+    - github:latest
+    - docker-plugin:latest
+    - docker-workflow:latest
+    - job-dsl:latest
+
+  serviceAccount:
+     name: jenkins-sa
+     create: false
+
+  JCasC:
+    configScripts:
+      credentials: |
+        credentials:
+          system:
+            domainCredentials:
+              - credentials:
+                  - usernamePassword:
+                      scope: GLOBAL
+                      id: github-token
+                      # Replace with your GitHub username and a personal access token (PAT) with repo permissions
+                      username: ""
+                      password: ""
+                      description: GitHub PAT
+      seed-job: |
+        jobs:
+          - script: >
+              job('seed-job') {
+                description('Job to generate pipeline for Django project')
+                scm {
+                  git {
+                    remote {
+                      url('https://github.com/antmuraha/goit-devops.git')
+                      credentials('github-token')
+                    }
+                    branches('*/lesson-8-9')
+                  }
+                }
+                steps {
+                  dsl {
+                    text('''
+                      pipelineJob("goit-django-docker") {
+                        definition {
+                          cpsScm {
+                            scm {
+                              git {
+                                remote {
+                                  url("https://github.com/antmuraha/goit-devops.git")
+                                  credentials("github-token")
+                                }
+                                branches("*/lesson-8-9")
+                              }
+                            }
+                          }
+                          scriptPath("ci/Jenkinsfile") 
+                        }
+                      }
+                    ''')
+                  }
+                }
+              }

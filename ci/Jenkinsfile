@@ -1,0 +1,73 @@
+pipeline {
+  agent { kubernetes { yaml """ ... """ } }
+
+  environment {
+    COMMIT_EMAIL  = "jenkins@localhost"
+    COMMIT_NAME   = "jenkins"
+    IMAGE_NAME    = "django-app"
+    GIT_REPO_URL  = "https://github.com/antmuraha/goit-devops.git"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+
+    stage('Set Tag') {
+      steps {
+        script {
+          env.IMAGE_TAG = sh(
+            script: "git rev-parse --short HEAD",
+            returnStdout: true
+          ).trim()
+        }
+      }
+    }
+
+    stage('Build & Push Docker Image') {
+      steps {
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \
+              --context "$WORKSPACE/app" \
+              --dockerfile "$WORKSPACE/infra/docker/django/Dockerfile" \
+              --destination="$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG" \
+              --cache=true
+          '''
+        }
+      }
+    }
+
+    stage('Update Chart Tag in Git') {
+      steps {
+        container('git') {
+          withCredentials([
+            usernamePassword(
+              credentialsId: 'github-token',
+              usernameVariable: 'GIT_USERNAME',
+              passwordVariable: 'GIT_PAT'
+            )
+          ]) {
+            sh '''
+              REPO_DIR=$(basename "$GIT_REPO_URL" .git)
+              git clone https://${GIT_USERNAME}:${GIT_PAT}@${GIT_REPO_URL#https://}
+
+              cd "$REPO_DIR/gitops/django-app"   # ← виправлений шлях
+
+              apk add --no-cache yq
+              yq -i '.image.tag = "'"$IMAGE_TAG"'"' values.yaml
+              yq -i '.image.repository = "'"$ECR_REGISTRY/$IMAGE_NAME"'"' values.yaml
+
+              git config user.email "$COMMIT_EMAIL"
+              git config user.name  "$COMMIT_NAME"
+              git add values.yaml
+              git diff --cached --quiet && echo "No changes" && exit 0
+              git commit -m "ci: update image tag to $IMAGE_TAG"
+              git push origin main
+            '''
+          }
+        }
+      }
+    }
+  }
+}
