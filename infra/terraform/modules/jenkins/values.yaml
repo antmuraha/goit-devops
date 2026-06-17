@@ -5,6 +5,7 @@ controller:
     # password: admin123
 
   serviceType: LoadBalancer
+  serviceAccountName: jenkins-sa
   servicePort: 80
   service:
     port: 80
@@ -23,14 +24,13 @@ controller:
     storageClass: "ebs-sc"
     size: 10Gi
 
-  controller:
-    env:
-      - name: ECR_REGISTRY
-        value: "${ecr_registry}"
-      - name: IMAGE_NAME
-        value: "django-app"
-      - name: GIT_REPO_URL
-        value: "https://github.com/antmuraha/goit-devops.git"
+  env:
+    - name: ECR_REGISTRY
+      value: "${ecr_registry}"
+    - name: IMAGE_NAME
+      value: "django-app"
+    - name: GIT_REPO_URL
+      value: "https://github.com/antmuraha/goit-devops.git"
 
   installPlugins:
     - kubernetes:latest
