@@ -21,7 +21,11 @@ from django.urls import path
 def health(request):
     return JsonResponse({"status": "ok"})
 
+def debug(request):
+    return JsonResponse({"version": "1.0.0", "status": "ok"})
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health/', health),
+    path('debug/', debug),
 ]
