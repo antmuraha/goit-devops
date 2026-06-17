@@ -18,6 +18,13 @@ spec:
       command:
         - cat
       tty: true
+      resources:
+        requests:
+          memory: "1Gi"
+          cpu: "500m"
+        limits:
+          memory: "3Gi"
+          cpu: "2"
 
     - name: git
       image: alpine/git
