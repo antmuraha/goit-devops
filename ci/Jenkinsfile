@@ -86,21 +86,18 @@ spec:
       steps {
         container('git') {
           withCredentials([
-            usernamePassword(
-              credentialsId: 'github-token',
-              usernameVariable: 'GIT_USERNAME',
-              passwordVariable: 'GIT_PAT'
-            )
+            string(credentialsId: 'github-token', variable: 'GIT_PAT')
           ]) {
             sh '''
-              REPO_DIR=$(basename "$GIT_REPO_URL" .git)
-              git config --global --add safe.directory /home/jenkins/agent/workspace/goit-django-docker
+              set -e
 
-              echo "Username: $GIT_USERNAME"
-              echo "PAT: ${GIT_PAT: -10}"
+              git config --global --add safe.directory '*'
 
-              git clone https://${GIT_USERNAME}:${GIT_PAT}@github.com/antmuraha/goit-devops.git
-              cd goit-devops/
+              echo "PAT length: ${#GIT_PAT}"
+
+              git clone https://x-access-token:${GIT_PAT}@github.com/antmuraha/goit-devops.git
+
+              cd goit-devops
               git checkout lesson-8-9
               cd gitops/django-app
 
@@ -118,7 +115,7 @@ spec:
 
               git commit -m "ci: update image tag to $IMAGE_TAG"
 
-              git push https://${GIT_USERNAME}:${GIT_PAT}@github.com/antmuraha/goit-devops.git lesson-8-9
+              git push https://x-access-token:${GIT_PAT}@github.com/antmuraha/goit-devops.git lesson-8-9
             '''
           }
         }
