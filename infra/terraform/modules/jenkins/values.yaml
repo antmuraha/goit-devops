@@ -54,12 +54,10 @@ controller:
           system:
             domainCredentials:
               - credentials:
-                  - usernamePassword:
+                  - string:
                       scope: GLOBAL
                       id: github-token
-                      # Replace with your GitHub username and a personal access token (PAT) with repo permissions
-                      username: ""
-                      password: ""
+                      secret: ""
                       description: GitHub PAT
       seed-job: |
         jobs:
