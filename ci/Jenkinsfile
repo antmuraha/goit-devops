@@ -1,5 +1,24 @@
 pipeline {
-  agent { kubernetes { yaml """ ... """ } }
+  agent { kubernetes { yaml """
+  apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    some-label: jenkins-kaniko
+spec:
+  serviceAccountName: jenkins-sa
+
+  containers:
+  - name: jnlp
+    image: jenkins/inbound-agent:latest
+
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:v1.16.0-debug
+    command:
+      - sleep
+    args:
+      - 99d
+  """ } }
 
   environment {
     COMMIT_EMAIL  = "jenkins@localhost"
