@@ -90,8 +90,8 @@ controller:
                                 branches("*/lesson-8-9")
                               }
                             }
+                            scriptPath("ci/Jenkinsfile")
                           }
-                          scriptPath("ci/Jenkinsfile") 
                         }
                       }
                     ''')
