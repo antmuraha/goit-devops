@@ -33,6 +33,7 @@ spec:
     COMMIT_NAME   = "jenkins"
     IMAGE_NAME    = "django-app"
     GIT_REPO_URL  = "https://github.com/antmuraha/goit-devops.git"
+    ECR_REGISTRY = "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
   }
 
   stages {
@@ -45,17 +46,6 @@ spec:
         script {
           env.IMAGE_TAG = sh(
             script: "git rev-parse --short HEAD",
-            returnStdout: true
-          ).trim()
-        }
-      }
-    }
-
-    stage('Load Terraform Outputs') {
-      steps {
-        script {
-          env.ECR_REGISTRY = sh(
-            script: "terraform output -raw ecr_repository_url",
             returnStdout: true
           ).trim()
         }
