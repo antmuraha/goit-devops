@@ -51,6 +51,14 @@ spec:
       }
     }
 
+    stage('Debug Env') {
+      steps {
+        container('kaniko') {
+          sh 'echo "ECR_REGISTRY=$ECR_REGISTRY"'
+        }
+      }
+    }
+
     stage('Build & Push Docker Image') {
       steps {
         container('kaniko') {
