@@ -100,8 +100,9 @@ spec:
               echo "PAT: ${GIT_PAT: -10}"
 
               git clone https://${GIT_USERNAME}:${GIT_PAT}@github.com/antmuraha/goit-devops.git
+              cd goit-devops/
               git checkout lesson-8-9
-              cd goit-devops/gitops/django-app
+              cd gitops/django-app
 
               apk add --no-cache yq || true
 
