@@ -1,9 +1,0 @@
-server:
-  service:
-    type: LoadBalancer
-    port: 80
-
-hpa:
-  minReplicas: 2
-  maxReplicas: 6
-  targetCPUUtilizationPercentage: 70

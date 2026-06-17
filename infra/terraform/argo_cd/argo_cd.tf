@@ -5,7 +5,9 @@ resource "helm_release" "argo_cd" {
   chart      = "argo-cd"
   version    = var.chart_version
 
-  values = [file("${path.module}/values.yaml")]
+  values = [
+    file("${path.root}/../../gitops/argocd/charts/values.yaml")
+  ]
 
   create_namespace = true
 }
