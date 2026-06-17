@@ -7,7 +7,7 @@ yaml '''
 apiVersion: v1
 kind: Pod
 spec:
-  serviceAccountName: default
+  serviceAccountName: 'jenkins-sa'
   containers:
     - name: jnlp
       image: jenkins/inbound-agent:latest
