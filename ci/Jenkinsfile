@@ -51,6 +51,17 @@ spec:
       }
     }
 
+    stage('Load Terraform Outputs') {
+      steps {
+        script {
+          env.ECR_REGISTRY = sh(
+            script: "terraform output -raw ecr_repository_url",
+            returnStdout: true
+          ).trim()
+        }
+      }
+    }
+
     stage('Debug Env') {
       steps {
         container('kaniko') {
