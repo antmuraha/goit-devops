@@ -1,10 +1,9 @@
 image:
   repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr/django-app"
   tag: "b50434b"
-server:
-  service:
-    type: LoadBalancer
-    port: 80
+service:
+  type: LoadBalancer
+  port: 80
 hpa:
   minReplicas: 2
   maxReplicas: 6
