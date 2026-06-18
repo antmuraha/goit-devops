@@ -26,7 +26,7 @@ spec:
               echo "DB HOST: $POSTGRES_HOST"
 
               echo "PASSWORD LENGTH: ${#POSTGRES_PASSWORD}"
-              echo "PASSWORD PREFIX: ${POSTGRES_PASSWORD:0:2}***"
+              echo "PASSWORD PREFIX: $(echo "$POSTGRES_PASSWORD" | cut -c1-2)***"
 
               echo "=== ENV SNAPSHOT (filtered) ==="
               env | grep -E "POSTGRES|DATABASE|DB"
