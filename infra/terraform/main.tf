@@ -82,6 +82,9 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# START KUBERNETES_AND_HELM_PROVIDERS
+# The Kubernetes and Helm providers are configured in the Jenkins module to avoid circular dependencies during the initial apply.
+# After the first apply, you can uncomment these blocks to allow Terraform to manage Jenkins resources directly.
 data "aws_eks_cluster" "this" {
   name = module.eks.eks_cluster_name
 }
@@ -104,6 +107,7 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.this.token
   }
 }
+# END KUBERNETES_AND_HELM_PROVIDERS
 
 module "argo_cd" {
   source       = "./modules/argo_cd"
