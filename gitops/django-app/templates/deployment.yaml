@@ -16,10 +16,26 @@ spec:
         - name: django-migrations
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command:
-            - python
-            - manage.py
-            - migrate
-            - --noinput
+            - sh
+            - -c
+            - |
+              echo "=== DJANGO DB DEBUG ==="
+
+              echo "DB USER: $POSTGRES_USER"
+              echo "DB NAME: $POSTGRES_DB"
+              echo "DB HOST: $POSTGRES_HOST"
+
+              echo "PASSWORD LENGTH: ${#POSTGRES_PASSWORD}"
+              echo "PASSWORD PREFIX: ${POSTGRES_PASSWORD:0:2}***"
+
+              echo "=== ENV SNAPSHOT (filtered) ==="
+              env | grep -E "POSTGRES|DATABASE|DB"
+
+              echo "=== DJANGO CHECK ==="
+              python manage.py check
+
+              echo "=== MIGRATE ==="
+              python manage.py migrate --noinput
           envFrom:
             - configMapRef:
                 name: django-config
