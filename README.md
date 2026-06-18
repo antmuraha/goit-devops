@@ -39,9 +39,9 @@ This includes setup instructions for a local Python environment.
 For required development tools (Docker, Docker Compose, etc.), see:
 [DEVTOOLS.README.md](DEVTOOLS.README.md)
 
-## Terraform Infrastructure
+## CI/CD Pipeline for Django Application using Jenkins, Terraform, Helm, and Argo CD
 
 This project uses Terraform to provision and manage cloud infrastructure in AWS.  
 The configuration is organized into reusable modules for better scalability and maintainability.
 
-You can find the full Terraform configuration here [Terraform Configuration](./infra/terraform)
+You can find the full configurations here [Configurations](./infra/terraform)
