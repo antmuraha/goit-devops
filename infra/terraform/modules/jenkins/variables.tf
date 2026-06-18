@@ -34,8 +34,3 @@ variable "ecr_registry" {
   description = "AWS ECR registry URL"
   type        = string
 }
-
-variable "git_repository_url" {
-  description = "Git repository URL used by Jenkins pipeline"
-  type        = string
-}

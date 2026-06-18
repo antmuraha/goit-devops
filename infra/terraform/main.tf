@@ -72,7 +72,6 @@ module "jenkins" {
   jenkins_admin_password = var.jenkins_admin_password
 
   ecr_registry = module.ecr.repository_url
-  git_repository_url = var.git_repository_url
 
   depends_on = [
     module.eks
@@ -110,7 +109,6 @@ module "argo_cd" {
   source       = "./argo_cd"
   namespace    = "argocd"
   chart_version = "5.46.4"
-  git_repository_url = var.git_repository_url
   depends_on = [
     module.eks
   ]
