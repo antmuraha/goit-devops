@@ -50,6 +50,8 @@ A complete CI/CD pipeline has been implemented using Jenkins, Terraform, Helm, a
 └── README.md
 ```
 
+![Argo CD architecture diagram](../../images/argocd.jpeg)
+
 ## 2. Configure environment for services
 
 Setup environment variables:
