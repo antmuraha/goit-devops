@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: db
 spec:
   replicas: 1
   selector:
@@ -13,7 +13,7 @@ spec:
         app: postgres
     spec:
       containers:
-        - name: postgres
+        - name: db
           image: postgres:18.4
           ports:
             - containerPort: 5432
@@ -31,7 +31,4 @@ spec:
                   key: POSTGRES_USER
 
             - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: django-secret
-                  key: POSTGRES_PASSWORD
+              value: {{ .Values.env.POSTGRES_PASSWORD | quote }}
