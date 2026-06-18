@@ -1,6 +1,6 @@
 image:
   repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
-  tag: "eb0a368"
+  tag: "b95d420"
 service:
   type: LoadBalancer
   port: 80
