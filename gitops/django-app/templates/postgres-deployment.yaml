@@ -1,9 +1,8 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: postgres
 spec:
-  serviceName: db
   replicas: 1
   selector:
     matchLabels:
@@ -18,9 +17,6 @@ spec:
           image: postgres:18.4
           ports:
             - containerPort: 5432
-          volumeMounts:
-            - name: postgres-data
-              mountPath: /var/lib/postgresql
           env:
             - name: POSTGRES_DB
               valueFrom:
@@ -39,16 +35,3 @@ spec:
                 secretKeyRef:
                   name: django-secret
                   key: POSTGRES_PASSWORD
-      volumeClaimTemplates:
-        - metadata:
-            name: postgres-data
-
-          spec:
-            accessModes:
-              - ReadWriteOnce
-
-            storageClassName: ebs-sc
-
-            resources:
-              requests:
-                storage: 10Gi
