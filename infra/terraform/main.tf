@@ -118,17 +118,3 @@ module "argo_cd" {
   ]
 }
 
-variable "postgres_password" {
-  type      = string
-  sensitive = true
-}
-
-resource "kubernetes_secret_v1" "django_secret" {
-  metadata {
-    name = "django-secret"
-  }
-
-  data = {
-    POSTGRES_PASSWORD = var.postgres_password
-  }
-}
