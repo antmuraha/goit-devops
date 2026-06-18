@@ -1,6 +1,6 @@
 applications:
   - name: django-app
-    namespace: default
+    namespace: djangoapp
     project: default
     source:
       repoURL: https://github.com/antmuraha/goit-devops.git
@@ -8,7 +8,7 @@ applications:
       targetRevision: lesson-8-9
     destination:
       server: https://kubernetes.default.svc
-      namespace: default
+      namespace: djangoapp
     syncPolicy:
       automated:
         prune: true
