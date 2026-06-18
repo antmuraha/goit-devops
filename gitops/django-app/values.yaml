@@ -1,5 +1,5 @@
 image:
-  repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr/django-app"
+  repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
   tag: "b50434b"
 service:
   type: LoadBalancer
