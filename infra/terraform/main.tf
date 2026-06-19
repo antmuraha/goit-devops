@@ -59,6 +59,58 @@ module "eks" {
   node_instance_type = "t3.small"
 }
 
+
+module "rds" {
+  source = "./modules/rds"
+
+  name           = var.rds_name
+  use_aurora     = var.rds_use_aurora
+  engine         = var.rds_engine
+  engine_version = var.rds_engine_version
+
+  # --- Aurora-only ---
+  aurora_instance_count         = var.rds_aurora_instance_count
+  parameter_group_family_aurora = "aurora-postgresql18"
+
+
+  # --- RDS-only ---
+  parameter_group_family_rds = "postgres18"
+
+  # Common
+  instance_class          = var.rds_instance_class
+  allocated_storage       = var.rds_allocated_storage
+  db_name                 = var.rds_db_name
+  username                = "postgres"
+  password                = "admin123AWS23"
+  subnet_ids              = module.vpc.private_subnet_ids
+  publicly_accessible     = false
+  vpc_id                  = module.vpc.vpc_id
+  multi_az                = var.rds_multi_az
+  backup_retention_period = 1
+  parameters = {
+    max_connections            = "20"
+    log_min_duration_statement = "500"
+    log_statement   = "all"
+    work_mem        = "8192"
+  }
+
+  ingress_rules = [
+    {
+      from_port   = 5432
+      to_port     = 5432
+      protocol    = "tcp"
+      cidr_blocks = ["10.0.0.0/16"]
+    }
+  ]
+
+  tags = {
+    Environment = "dev"
+    Project     = "myapp"
+  }
+}
+
+
+
 # Connect Jenkins module
 module "jenkins" {
   source       = "./modules/jenkins"
@@ -110,8 +162,8 @@ provider "helm" {
 # END KUBERNETES_AND_HELM_PROVIDERS
 
 module "argo_cd" {
-  source       = "./modules/argo_cd"
-  namespace    = "argocd"
+  source        = "./modules/argo_cd"
+  namespace     = "argocd"
   chart_version = "5.46.4"
   depends_on = [
     module.eks
