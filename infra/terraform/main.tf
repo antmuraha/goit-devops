@@ -90,8 +90,8 @@ module "rds" {
   parameters = {
     max_connections            = "20"
     log_min_duration_statement = "500"
-    log_statement   = "all"
-    work_mem        = "8192"
+    log_statement              = "all"
+    work_mem                   = "8192"
   }
 
   ingress_rules = [
