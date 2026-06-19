@@ -19,7 +19,7 @@ terraform output -raw kubeconfig > ./kubeconfig
 # Update kubeconfig for AWS EKS
 aws eks update-kubeconfig \
   --region us-east-1 \
-  --name lesson-7-eks \
+  --name lesson-8-9-eks \
   --kubeconfig ./kubeconfig
 
 # Export kubeconfig environment variable
@@ -47,7 +47,7 @@ Retrieve the ECR repository URL from Terraform:
 ```bash
 terraform output ecr_repository_url
 # Example output:
-# 123456789012.dkr.ecr.us-east-1.amazonaws.com/lesson-7-ecr
+# 123456789012.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr
 ```
 
 Build and tag the Docker image:
@@ -55,10 +55,10 @@ Build and tag the Docker image:
 ```bash
 # From the root of the project
 # Build the image using Podman or Docker
-podman build -t lesson-7-django ./app -f infra/docker/django/Dockerfile
+podman build -t lesson-8-9-django ./app -f infra/docker/django/Dockerfile
 
 # Tag the image with the ECR repository URL
-docker tag lesson-7-django:latest <ECR_REPOSITORY_URL>:latest
+docker tag lesson-8-9-django:latest <ECR_REPOSITORY_URL>:latest
 ```
 
 Push the image to ECR:
@@ -88,7 +88,7 @@ helm template ./charts/django-app \
     --set env.POSTGRES_PORT=5432 \
     --set env.POSTGRES_DB=postgres \
     --set env.POSTGRES_USER=postgres \
-    --set secret.POSTGRES_PASSWORD='SuperSecretPassword'
+    --set env.POSTGRES_PASSWORD='SuperSecretPassword'
 ```
 
 Check existing Helm releases:
@@ -112,7 +112,7 @@ helm install django-app ./charts/django-app \
   --set env.POSTGRES_PORT=5432 \
   --set env.POSTGRES_DB=postgres \
   --set env.POSTGRES_USER=postgres \
-  --set secret.POSTGRES_PASSWORD='SuperSecretPassword'
+  --set env.POSTGRES_PASSWORD='SuperSecretPassword'
 ```
 
 > Note: Use `helm upgrade` if the release already exists.

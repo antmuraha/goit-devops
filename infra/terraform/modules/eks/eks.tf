@@ -1,6 +1,6 @@
-provider "aws" {
-  region = "us-east-1"
-}
+# provider "aws" {
+#  region = "us-east-1"
+# }
 
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
@@ -24,10 +24,15 @@ resource "aws_eks_node_group" "this" {
   scaling_config {
     desired_size = var.node_count
     max_size     = var.node_count * 2
-    min_size     = var.node_count
+    min_size     = 1
   }
   instance_types = [var.node_instance_type]
-  depends_on     = [aws_eks_cluster.this]
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  depends_on = [aws_eks_cluster.this]
 }
 
 # IAM Role for EKS Cluster

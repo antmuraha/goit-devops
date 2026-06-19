@@ -53,3 +53,22 @@ output "bucket_url" {
 output "ecr_repository_url" {
   value = module.ecr.repository_url
 }
+
+###### Jenkins Outputs ######
+
+output "jenkins_release" {
+  value = module.jenkins.jenkins_release_name
+}
+
+output "jenkins_namespace" {
+  value = module.jenkins.jenkins_namespace
+}
+
+output "jenkins_url" {
+  description = "Public Jenkins URL (if exposed via LoadBalancer)"
+  value       = module.jenkins.jenkins_url
+}
+
+output "argocd_url" {
+  value = module.argo_cd.argocd_url
+}

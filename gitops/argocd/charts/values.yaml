@@ -1,0 +1,20 @@
+applications:
+  - name: django-app
+    namespace: djangoapp
+    project: default
+    source:
+      repoURL: https://github.com/antmuraha/goit-devops.git
+      path: gitops/django-app
+      targetRevision: lesson-8-9
+    destination:
+      server: https://kubernetes.default.svc
+      namespace: djangoapp
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+
+server:
+  service:
+    type: LoadBalancer
+    port: 80

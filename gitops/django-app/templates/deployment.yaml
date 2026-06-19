@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: django
+  template:
+    metadata:
+      labels:
+        app: django
+    spec:
+      initContainers:
+        - name: django-migrations
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command:
+            - sh
+            - -c
+            - |
+              echo "=== DJANGO DB DEBUG ==="
+
+              echo "DB USER: $POSTGRES_USER"
+              echo "DB NAME: $POSTGRES_DB"
+              echo "DB HOST: $POSTGRES_HOST"
+
+              echo "PASSWORD LENGTH: ${#POSTGRES_PASSWORD}"
+              echo "PASSWORD PREFIX: $(echo "$POSTGRES_PASSWORD" | cut -c1-2)***"
+
+              echo "=== ENV SNAPSHOT (filtered) ==="
+              env | grep -E "POSTGRES|DATABASE|DB"
+
+              echo "=== DJANGO CHECK ==="
+              python manage.py check
+
+              echo "=== MIGRATE ==="
+              python manage.py migrate --noinput
+          envFrom:
+            - configMapRef:
+                name: django-config
+          env:
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.env.POSTGRES_PASSWORD | quote }}
+
+      containers:
+        - name: django
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 8000
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+            readinessProbe:
+              httpGet:
+                path: /health/
+                port: 8000
+              initialDelaySeconds: 20
+              periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8000
+
+            initialDelaySeconds: 30
+            periodSeconds: 20
+
+          envFrom:
+            - configMapRef:
+                name: django-config
+
+          env:
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.env.POSTGRES_PASSWORD | quote }}

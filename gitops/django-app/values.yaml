@@ -1,16 +1,13 @@
 image:
-  repository: "<account_id>.dkr.ecr.us-east-1.amazonaws.com/lesson-7-ecr"
-  tag: "latest"
-
+  repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
+  tag: "237f836"
 service:
   type: LoadBalancer
   port: 80
-
 hpa:
   minReplicas: 2
   maxReplicas: 6
   targetCPUUtilizationPercentage: 70
-
 env:
   PRODUCTION: "True"
   ALLOWED_HOSTS: "*"
@@ -18,4 +15,4 @@ env:
   POSTGRES_PORT: "5432"
   POSTGRES_DB: postgres
   POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: "VerySecretPassword"
+  POSTGRES_PASSWORD: "supersecret"

@@ -1,0 +1,125 @@
+pipeline {
+  agent { 
+    kubernetes {
+      label 'kaniko-agent'
+
+yaml '''
+apiVersion: v1
+kind: Pod
+spec:
+  serviceAccountName: 'jenkins-sa'
+  containers:
+    - name: jnlp
+      image: jenkins/inbound-agent:latest
+      args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+
+    - name: kaniko
+      image: gcr.io/kaniko-project/executor:v1.16.0-debug
+      command:
+        - cat
+      tty: true
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "200m"
+        limits:
+          memory: "512Mi"
+          cpu: "1"
+
+    - name: git
+      image: alpine/git
+      command:
+        - cat
+      tty: true
+'''
+    }
+   }
+
+  environment {
+    COMMIT_EMAIL  = "jenkins@localhost"
+    COMMIT_NAME   = "jenkins"
+    IMAGE_NAME    = "django-app"
+    GIT_REPO_URL  = "https://github.com/antmuraha/goit-devops.git"
+    ECR_REGISTRY = "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps { checkout scm }
+    }
+
+    stage('Set Tag') {
+      steps {
+        script {
+          env.IMAGE_TAG = sh(
+            script: "git rev-parse --short HEAD",
+            returnStdout: true
+          ).trim()
+        }
+      }
+    }
+
+    stage('Debug Env') {
+      steps {
+        container('kaniko') {
+          sh 'echo "ECR_REGISTRY=$ECR_REGISTRY"'
+        }
+      }
+    }
+
+    stage('Build & Push Docker Image') {
+      steps {
+        container('kaniko') {
+          sh '''
+            /kaniko/executor \
+              --context "$WORKSPACE/app" \
+              --dockerfile "$WORKSPACE/infra/docker/django/Dockerfile" \
+              --destination="$ECR_REGISTRY:$IMAGE_TAG" \
+              --cache=true \
+              --skip-tls-verify
+          '''
+        }
+      }
+    }
+
+    stage('Update Chart Tag in Git') {
+      steps {
+        container('git') {
+          withCredentials([
+            string(credentialsId: 'github-token', variable: 'GIT_PAT')
+          ]) {
+            sh '''
+              set -e
+
+              git config --global --add safe.directory '*'
+
+              echo "PAT length: ${#GIT_PAT}"
+
+              git clone https://x-access-token:${GIT_PAT}@github.com/antmuraha/goit-devops.git
+
+              cd goit-devops
+              git checkout lesson-8-9
+              cd gitops/django-app
+
+              apk add --no-cache yq || true
+
+              yq -i '.image.tag = strenv(IMAGE_TAG)' values.yaml
+              yq -i '.image.repository = strenv(ECR_REGISTRY)' values.yaml
+
+              git config --global user.email "$COMMIT_EMAIL"
+              git config --global user.name "$COMMIT_NAME"
+
+              git add values.yaml
+
+              git diff --cached --quiet && echo "No changes" && exit 0
+
+              git commit -m "ci: update image tag to $IMAGE_TAG"
+
+              git push https://x-access-token:${GIT_PAT}@github.com/antmuraha/goit-devops.git lesson-8-9
+            '''
+          }
+        }
+      }
+    }
+  }
+}
