@@ -70,7 +70,7 @@ controller:
                       url('https://github.com/antmuraha/goit-devops.git')
                       credentials('github-token')
                     }
-                    branches('*/lesson-8-9')
+                    branches('*/lesson-11')
                   }
                 }
                 steps {
@@ -85,7 +85,7 @@ controller:
                                   url("https://github.com/antmuraha/goit-devops.git")
                                   credentials("github-token")
                                 }
-                                branches("*/lesson-8-9")
+                                branches("*/lesson-11")
                               }
                             }
                             scriptPath("ci/Jenkinsfile")

@@ -11,7 +11,7 @@ variable "jenkins_admin_password" {
 
 variable "ecr_repository_name" {
   type    = string
-  default = "lesson-8-9-ecr"
+  default = "lesson-11-ecr"
 }
 
 variable "rds_name" {
