@@ -107,6 +107,9 @@ module "rds" {
     Environment = "dev"
     Project     = "myapp"
   }
+  depends_on = [
+    module.vpc
+  ]
 }
 
 
