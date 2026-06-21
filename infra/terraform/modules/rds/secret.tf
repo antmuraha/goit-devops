@@ -1,5 +1,5 @@
 resource "aws_secretsmanager_secret" "rds" {
-  name = "${var.name}-rds-secret"
+  name = "fp-rds-secret"
 }
 
 resource "aws_secretsmanager_secret_version" "rds" {
@@ -14,12 +14,8 @@ resource "aws_secretsmanager_secret_version" "rds" {
   })
 }
 
-data "aws_secretsmanager_secret" "rds" {
-  arn = aws_db_instance.this[0].master_user_secret[0].secret_arn
-}
-
 data "aws_secretsmanager_secret_version" "rds" {
-  secret_id = data.aws_secretsmanager_secret.rds.id
+  secret_id = aws_db_instance.this[0].master_user_secret[0].secret_arn
 }
 
 locals {

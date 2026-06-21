@@ -122,7 +122,17 @@ resource "aws_iam_role" "external_secrets" {
       Principal = {
         Federated = aws_iam_openid_connect_provider.oidc.arn
       },
-      Action = "sts:AssumeRoleWithWebIdentity"
+      Action = "sts:AssumeRoleWithWebIdentity",
+      Condition = {
+        StringEquals = {
+          "${replace(aws_eks_cluster.this.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:external-secrets:external-secrets-sa"
+        }
+      }
     }]
   })
+}
+
+resource "aws_iam_role_policy_attachment" "external_secrets" {
+  policy_arn = aws_iam_policy.secrets_access.arn
+  role       = aws_iam_role.external_secrets.name
 }
