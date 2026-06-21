@@ -1,0 +1,56 @@
+prometheus:
+  prometheusSpec:
+    retention: 1d
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp2
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 5Gi
+
+    serviceMonitorSelector: {}
+    serviceMonitorSelectorNilUsesHelmValues: false
+
+    podMonitorSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+
+grafana:
+  admin:
+    existingSecret: grafana-admin-secret
+    userKey: admin-user
+    passwordKey: admin-password
+
+  service:
+    type: ClusterIP
+
+  persistence:
+    enabled: true
+    storageClassName: gp2
+    size: 5Gi
+
+  sidecar:
+    dashboards:
+      enabled: true
+    datasources:
+      enabled: true
+
+prometheus-node-exporter:
+  enabled: true
+
+kube-state-metrics:
+  enabled: true
+
+alertmanager:
+  enabled: true
+
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp2
+          resources:
+            requests:
+              storage: 5Gi
