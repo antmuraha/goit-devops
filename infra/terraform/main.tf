@@ -55,7 +55,7 @@ module "eks" {
   vpc_id             = module.vpc.vpc_id
   subnet_ids         = module.vpc.private_subnet_ids
   node_group_name    = "lesson-fp-nodes"
-  node_count         = 3
+  node_count         = 4
   node_instance_type = "t3.small"
 }
 
