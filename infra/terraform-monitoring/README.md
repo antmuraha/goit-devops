@@ -68,6 +68,15 @@ terraform validate
 terraform apply
 ```
 
+### 4. Verify deployment
+```bash
+kubectl get pods -n monitoring
+kubectl get svc -n monitoring
+kubectl get endpoints -n monitoring
+kubectl get deployments -n monitoring
+helm status kube-prometheus-stack -n monitoringreplicas: 1
+```
+
 ---
 
 ## Configuration Structure
