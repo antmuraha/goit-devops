@@ -40,8 +40,30 @@ spec:
             - configMapRef:
                 name: django-config
           env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: host
+
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: dbname
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: username
+
             - name: POSTGRES_PASSWORD
-              value: {{ .Values.env.POSTGRES_PASSWORD | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: rds-credentials
+                  key: password
+            
 
       containers:
         - name: django
@@ -74,7 +96,5 @@ spec:
           envFrom:
             - configMapRef:
                 name: django-config
-
-          env:
-            - name: POSTGRES_PASSWORD
-              value: {{ .Values.env.POSTGRES_PASSWORD | quote }}
+            - secretRef:
+                name: rds-credentials
