@@ -69,6 +69,7 @@ terraform apply
 ```
 
 ### 4. Verify deployment
+
 ```bash
 kubectl get pods -n monitoring
 kubectl get svc -n monitoring
@@ -212,3 +213,15 @@ Compared to standalone Prometheus setups, it reduces manual scrape configuration
 - Grafana dashboards and datasources are managed automatically via sidecar provisioning
 - Prometheus does not require manual scrape configuration
 - Alert rules are managed via PrometheusRule CRDs (not YAML scrape configs)
+
+## Troubleshooting
+
+If Terraform resources already exist, import them into state:
+
+```bash
+terraform import helm_release.kube_prometheus_stack monitoring/kube-prometheus-stack
+```
+Temporarily scale down monitoring workloads to zero to avoid conflicts:
+```bash
+kubectl scale deploy -n monitoring --all --replicas=0
+```
