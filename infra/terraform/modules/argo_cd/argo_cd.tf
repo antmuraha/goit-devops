@@ -22,6 +22,9 @@ resource "helm_release" "argo_apps" {
     file("${path.root}/../../gitops/argocd/charts/values.yaml")
   ]
   depends_on = [helm_release.argo_cd]
+
+  wait    = true
+  timeout = 600
 }
 
 data "kubernetes_service_v1" "argo_cd" {

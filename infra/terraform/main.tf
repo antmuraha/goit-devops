@@ -34,13 +34,13 @@ module "vpc" {
   public_subnets     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
   private_subnets    = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
   availability_zones = ["us-east-1a", "us-east-1b", "us-east-1c"]
-  vpc_name           = "lesson-11-vpc"
+  vpc_name           = "lesson-fp-vpc"
 }
 
 # Connect ECR module
 module "ecr" {
   source = "./modules/ecr"
-  # ecr_name    = "lesson-11-ecr"
+  # ecr_name    = "lesson-fp-ecr"
 
   repository_name      = var.ecr_repository_name
   image_tag_mutability = "IMMUTABLE"
@@ -51,11 +51,11 @@ module "ecr" {
 # Connect EKS module
 module "eks" {
   source             = "./modules/eks"
-  cluster_name       = "lesson-11-eks"
+  cluster_name       = "lesson-fp-eks"
   vpc_id             = module.vpc.vpc_id
   subnet_ids         = module.vpc.private_subnet_ids
-  node_group_name    = "lesson-11-nodes"
-  node_count         = 2
+  node_group_name    = "lesson-fp-nodes"
+  node_count         = 3
   node_instance_type = "t3.small"
 }
 
@@ -80,8 +80,7 @@ module "rds" {
   instance_class          = var.rds_instance_class
   allocated_storage       = var.rds_allocated_storage
   db_name                 = var.rds_db_name
-  username                = "postgres"
-  password                = "admin123AWS23"
+  username                = var.rds_username
   subnet_ids              = module.vpc.private_subnet_ids
   publicly_accessible     = false
   vpc_id                  = module.vpc.vpc_id
@@ -105,10 +104,12 @@ module "rds" {
 
   tags = {
     Environment = "dev"
-    Project     = "myapp"
+    Project     = "lesson-fp"
   }
+
   depends_on = [
-    module.vpc
+    module.vpc,
+    module.eks
   ]
 }
 
@@ -152,7 +153,11 @@ provider "kubernetes" {
   host                   = data.aws_eks_cluster.this.endpoint
   cluster_ca_certificate = base64decode(data.aws_eks_cluster.this.certificate_authority[0].data)
 
-  token = data.aws_eks_cluster_auth.this.token
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    args        = ["eks", "get-token", "--cluster-name", module.eks.eks_cluster_name]
+  }
 }
 
 provider "helm" {
@@ -169,7 +174,9 @@ module "argo_cd" {
   namespace     = "argocd"
   chart_version = "5.46.4"
   depends_on = [
-    module.eks
+    module.eks,
+    module.rds,
+    module.eks.external_secrets
   ]
 }
 

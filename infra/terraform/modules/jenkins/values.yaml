@@ -14,7 +14,7 @@ controller:
   resources:
     limits:
       cpu: "500m"
-      memory: "1Gi"
+      memory: "2Gi"
     requests:
       cpu: "250m"
       memory: "512Mi"
@@ -70,7 +70,7 @@ controller:
                       url('https://github.com/antmuraha/goit-devops.git')
                       credentials('github-token')
                     }
-                    branches('*/lesson-11')
+                    branches('*/lesson-fp')
                   }
                 }
                 steps {
@@ -85,7 +85,7 @@ controller:
                                   url("https://github.com/antmuraha/goit-devops.git")
                                   credentials("github-token")
                                 }
-                                branches("*/lesson-11")
+                                branches("*/lesson-fp")
                               }
                             }
                             scriptPath("ci/Jenkinsfile")

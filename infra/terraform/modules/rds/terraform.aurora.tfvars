@@ -1,4 +1,4 @@
-rds_name       = "myapp-aurora"
+rds_name       = "fp-aurora"
 rds_use_aurora = true
 rds_engine         = "postgres"
 rds_engine_version = "18.3"

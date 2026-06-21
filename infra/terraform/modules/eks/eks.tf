@@ -95,3 +95,34 @@ resource "aws_iam_role_policy_attachment" "eks_node_AmazonEKS_CNI_Policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.eks_node_role.name
 }
+
+resource "aws_iam_policy" "secrets_access" {
+  name = "${var.cluster_name}-secrets-access"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Action = [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:DescribeSecret"
+      ],
+      Resource = "*"
+    }]
+  })
+}
+
+resource "aws_iam_role" "external_secrets" {
+  name = "${var.cluster_name}-eso-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect = "Allow",
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.oidc.arn
+      },
+      Action = "sts:AssumeRoleWithWebIdentity"
+    }]
+  })
+}

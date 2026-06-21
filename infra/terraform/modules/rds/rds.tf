@@ -9,7 +9,7 @@ resource "aws_db_instance" "this" {
   allocated_storage = var.allocated_storage
   db_name           = var.db_name
   username          = var.username
-  password          = var.password
+  manage_master_user_password = true
 
   db_subnet_group_name   = aws_db_subnet_group.default.name
   vpc_security_group_ids = [aws_security_group.rds.id]

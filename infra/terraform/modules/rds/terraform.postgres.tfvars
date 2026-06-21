@@ -1,5 +1,5 @@
-rds_name       = "myapp-postgres"
-rds_db_name    = "myappdb"
+rds_name       = "fp-postgres"
+rds_db_name    = "fpdb"
 rds_use_aurora = false
 rds_engine         = "postgres"
 rds_engine_version = "18.3"
