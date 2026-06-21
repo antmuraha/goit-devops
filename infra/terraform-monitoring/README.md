@@ -44,7 +44,6 @@ All components are deployed inside a dedicated `monitoring` namespace.
 
 - Existing AWS EKS cluster provisioned via `terraform/`
 - Kubernetes & Helm providers configured in Terraform
-- Access to cluster credentials (via AWS IAM or kubeconfig)
 - Terraform >= 1.5.0
 
 ---
@@ -79,6 +78,8 @@ terraform apply
 - `providers.tf` - EKS connection (AWS → Kubernetes → Helm)
 - `helm.tf` - kube-prometheus-stack Helm release
 - `variables.tf` - cluster and Grafana configuration inputs
+- `backend.tf` - Terraform state backend configuration
+- `secrets.tf` - sensitive values (Grafana password, etc.)
 
 ### Helm configuration
 
@@ -120,10 +121,16 @@ Default credentials:
 
 ## Prometheus Access
 
-Prometheus is available internally within the cluster:
+Prometheus can be accessed via port-forwarding:
+
+```bash
+kubectl port-forward -n monitoring svc/kube-prometheus-stack-prometheus 9090:9090
+```
+
+Prometheus UI is available at:
 
 ```
-http://kube-prometheus-stack-prometheus.monitoring.svc:9090
+http://localhost:9090
 ```
 
 Used primarily by Grafana as a data source.
@@ -178,47 +185,6 @@ This ensures:
 
 ---
 
-## Extending Monitoring
-
-To expose metrics from applications:
-
-1. Add `ServiceMonitor` or `PodMonitor`
-2. Ensure application exposes `/metrics` endpoint
-3. Apply CRD manifests in the cluster
-
-Example:
-
-```
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: my-service
-spec:
-  selector:
-    matchLabels:
-      app: my-service
-  endpoints:
-    - port: http
-      path: /metrics
-```
-
----
-
-## Upgrade Strategy
-
-The stack is upgraded by changing:
-
-- Helm chart version in `helm.tf`
-- Values in `kube-prometheus-stack.yaml`
-
-Apply changes via Terraform:
-
-```bash
-terraform apply
-```
-
----
-
 ## Design Rationale
 
 This setup uses the **Prometheus Operator pattern** because it provides:
@@ -237,14 +203,3 @@ Compared to standalone Prometheus setups, it reduces manual scrape configuration
 - Grafana dashboards and datasources are managed automatically via sidecar provisioning
 - Prometheus does not require manual scrape configuration
 - Alert rules are managed via PrometheusRule CRDs (not YAML scrape configs)
-
----
-
-## Troubleshooting
-
-Reset Grafana admin password:
-
-```bash
-kubectl exec -n monitoring deploy/kube-prometheus-stack-grafana \
-  -- grafana cli admin reset-admin-password MyNewStrongPassword123
-```
