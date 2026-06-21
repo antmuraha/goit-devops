@@ -1,5 +1,5 @@
 image:
-  repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
+  repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-11-ecr"
   tag: "237f836"
 service:
   type: LoadBalancer

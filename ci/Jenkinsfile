@@ -40,7 +40,7 @@ spec:
     COMMIT_NAME   = "jenkins"
     IMAGE_NAME    = "django-app"
     GIT_REPO_URL  = "https://github.com/antmuraha/goit-devops.git"
-    ECR_REGISTRY = "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-8-9-ecr"
+    ECR_REGISTRY = "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-11-ecr"
   }
 
   stages {
@@ -98,7 +98,7 @@ spec:
               git clone https://x-access-token:${GIT_PAT}@github.com/antmuraha/goit-devops.git
 
               cd goit-devops
-              git checkout lesson-8-9
+              git checkout lesson-11
               cd gitops/django-app
 
               apk add --no-cache yq || true
@@ -115,7 +115,7 @@ spec:
 
               git commit -m "ci: update image tag to $IMAGE_TAG"
 
-              git push https://x-access-token:${GIT_PAT}@github.com/antmuraha/goit-devops.git lesson-8-9
+              git push https://x-access-token:${GIT_PAT}@github.com/antmuraha/goit-devops.git lesson-11
             '''
           }
         }
