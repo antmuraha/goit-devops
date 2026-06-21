@@ -80,7 +80,7 @@ module "rds" {
 
   tags = {
     Environment = "dev"
-    Project     = "myapp"
+    Project     = "lesson-fp"
   }
 }
 ```

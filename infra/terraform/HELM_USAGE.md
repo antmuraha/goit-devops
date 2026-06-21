@@ -19,7 +19,7 @@ terraform output -raw kubeconfig > ./kubeconfig
 # Update kubeconfig for AWS EKS
 aws eks update-kubeconfig \
   --region us-east-1 \
-  --name lesson-11-eks \
+  --name lesson-fp-eks \
   --kubeconfig ./kubeconfig
 
 # Export kubeconfig environment variable
@@ -47,7 +47,7 @@ Retrieve the ECR repository URL from Terraform:
 ```bash
 terraform output ecr_repository_url
 # Example output:
-# 123456789012.dkr.ecr.us-east-1.amazonaws.com/lesson-11-ecr
+# 123456789012.dkr.ecr.us-east-1.amazonaws.com/lesson-fp-ecr
 ```
 
 Build and tag the Docker image:
@@ -55,10 +55,10 @@ Build and tag the Docker image:
 ```bash
 # From the root of the project
 # Build the image using Podman or Docker
-podman build -t lesson-11-django ./app -f infra/docker/django/Dockerfile
+podman build -t lesson-fp-django ./app -f infra/docker/django/Dockerfile
 
 # Tag the image with the ECR repository URL
-docker tag lesson-11-django:latest <ECR_REPOSITORY_URL>:latest
+docker tag lesson-fp-django:latest <ECR_REPOSITORY_URL>:latest
 ```
 
 Push the image to ECR:
