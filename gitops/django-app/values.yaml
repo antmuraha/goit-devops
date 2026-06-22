@@ -1,7 +1,7 @@
 namespace: djangoapp
 image:
   repository: "509086684760.dkr.ecr.us-east-1.amazonaws.com/lesson-fp-ecr"
-  tag: "4ae341e"
+  tag: "8959255"
 service:
   type: LoadBalancer
   port: 80
