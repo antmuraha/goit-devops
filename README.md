@@ -46,3 +46,22 @@ _Description: Argo CD interface detailing the GitOps schema deployment status, h
 
 ![Grafana Monitoring](./images/grafana.jpeg)
 _Description: Grafana monitoring dashboards configured via the Prometheus stack, providing real-time metrics and operational data for the infrastructure._
+
+
+## Disclaimer
+
+This project is intended for educational, learning, and demonstration purposes only. While it implements industry-standard tools, practices, and cloud-native technologies, it should not be considered production-ready without further review, customization, and security hardening.
+
+Before deploying or using any part of this infrastructure in a production environment, additional measures should be taken, including but not limited to:
+
+* Comprehensive security assessment and hardening.
+* Review and refinement of IAM permissions and access controls.
+* Network security validation and segmentation review.
+* Secrets management and credential rotation policies.
+* Compliance, auditing, logging, and monitoring enhancements.
+* Backup, disaster recovery, and business continuity planning.
+* Application-level security testing and vulnerability remediation.
+
+By using this repository, you acknowledge that you are responsible for understanding the technologies, configurations, and operational implications involved. The examples and configurations provided here are intended to support learning and experimentation and may require significant modifications to meet the security, reliability, scalability, and compliance requirements of a production environment.
+
+Use this project only if you fully understand the changes you are making and the potential impact they may have on your infrastructure, data, and services.
