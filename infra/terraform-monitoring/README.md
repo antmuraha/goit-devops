@@ -75,7 +75,7 @@ kubectl get pods -n monitoring
 kubectl get svc -n monitoring
 kubectl get endpoints -n monitoring
 kubectl get deployments -n monitoring
-helm status kube-prometheus-stack -n monitoringreplicas: 1
+helm status kube-prometheus-stack -n monitoring
 ```
 
 ---
