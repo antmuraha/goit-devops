@@ -1,47 +1,48 @@
-# Django DevOps Example Project
+# Django Infrastructure and CI/CD Pipeline Architecture
 
-This is a minimal Django application for DevOps course practice and study purposes.
+## Project Overview
 
----
+This project serves as a comprehensive DevOps environment, designed to deploy a containerized Django application using modern infrastructure practices. The primary objective is the hands-on application and mastery of AWS services, Infrastructure as Code (IaC), continuous integration and deployment (CI/CD) workflows, and cluster monitoring.
 
-## Run with Docker/Podman
+## Architecture and Environment Configuration
 
-```bash
-cp .env.example .env
-docker-compose build
-docker-compose up
-```
+The environment is structured around a robust AWS cloud architecture, leveraging Kubernetes and GitOps methodologies. All infrastructure components are provisioned and managed using Terraform.
 
-Starts the application using Docker Compose.
+### Security
 
-Includes:
+Security is established at both the network and resource access levels. The infrastructure includes a custom Virtual Private Cloud (VPC) configured with NAT gateways and specific routing policies to isolate resources appropriately. Access control and communication boundaries are enforced through AWS IAM (Identity and Access Management) and Security Groups. Furthermore, sensitive data and credentials within the Kubernetes cluster are managed securely using the External Secrets operator.
 
-- Django application
-- PostgreSQL database
-- Nginx reverse proxy
+### Django Application Deployment and CI/CD
 
-After startup, the application will be available at:
-[http://localhost:8080](http://localhost:8080)
+The core application stack consists of a Django framework, an RDS Standard PostgreSQL database. The application is containerized via Docker and its images are stored securely in AWS Elastic Container Registry (ECR).
 
----
+The deployment lifecycle is fully automated using a comprehensive CI/CD pipeline:
 
-## Local Development
+- **Continuous Integration** is orchestrated by Jenkins, utilizing a declarative `Jenkinsfile` for building and testing.
+- **Continuous Deployment** is implemented using Argo CD and Helm charts following GitOps principles. This ensures that the state of the AWS EKS (Elastic Kubernetes Service) cluster strictly matches the repository configurations.
 
-For running the project without Docker, see:
-[app/README.md](app/README.md)
+### Monitoring and Autoscaling
 
-This includes setup instructions for a local Python environment.
+System health and cluster metrics are continuously collected and visualized using the `kube-prometheus-stack`, which deploys Prometheus, Grafana, and `node-exporter`. To handle varying traffic loads effectively, application autoscaling is configured via a Horizontal Pod Autoscaler (HPA) defined within the application's Helm charts.
 
----
+## Documentation Index
 
-## Dev Tools
+For detailed instructions, setup guides, and specific component configurations, please refer to the following documentation files:
+<!-- [app/README.md](app/README.md) -->
+- **Development Tools Setup**: [./DEVTOOLS.README.md](./DEVTOOLS.README.md)
+- **Local Development Guide**: [./app/README.md](./app/README.md)
+- **Infrastructure (Terraform) Configurations**: [./infra/terraform/README.md](./infra/terraform/README.md)
+- **Monitoring Configuration Guide**: [./infra/terraform-monitoring/README.md](./infra/terraform-monitoring/README.md)
 
-For required development tools (Docker, Docker Compose, etc.), see:
-[DEVTOOLS.README.md](DEVTOOLS.README.md)
+## System Visualizations
 
-## CI/CD Pipeline for Django Application using Jenkins, Terraform, Helm, and Argo CD
+The following images illustrate the deployed components and active workflows within the current architecture:
 
-This project uses Terraform to provision and manage cloud infrastructure in AWS.  
-The configuration is organized into reusable modules for better scalability and maintainability.
+![Jenkins Pipeline](./images/jenkins.jpeg)
+_Description: Jenkins dashboard displaying the Continuous Integration pipeline stages and execution status for the project._
 
-You can find the full configurations here [Configurations](./infra/terraform)
+![Argo CD Synchronization](./images/argocd.jpeg)
+_Description: Argo CD interface detailing the GitOps schema deployment status, health, and synchronization of Kubernetes resources within the EKS cluster._
+
+![Grafana Monitoring](./images/grafana.jpeg)
+_Description: Grafana monitoring dashboards configured via the Prometheus stack, providing real-time metrics and operational data for the infrastructure._
