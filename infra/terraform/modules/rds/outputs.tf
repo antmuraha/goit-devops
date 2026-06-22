@@ -6,7 +6,7 @@ output "rds_db_name" {
   value = var.db_name
 }
 
-output "rds_endpoint" {
+output "rds_host" {
   value = var.use_aurora ? aws_rds_cluster.this[0].endpoint : aws_db_instance.this[0].address
 }
 
@@ -35,4 +35,9 @@ output "rds_subnet_group_name" {
 
 output "rds_security_group_id" {
   value = aws_security_group.rds.id
+}
+
+output "rds_username" {
+  description = "The username for the RDS instance"
+  value = var.username
 }

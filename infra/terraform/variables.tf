@@ -11,18 +11,25 @@ variable "jenkins_admin_password" {
 
 variable "ecr_repository_name" {
   type    = string
-  default = "lesson-11-ecr"
+  default = "lesson-fp-ecr"
 }
 
 variable "rds_name" {
   description = "Name of the RDS instance or Aurora cluster"
   type        = string
+  default     = "fp-postgres"
 }
 
 variable "rds_db_name" {
   description = "Name of the initial database to create"
   type        = string
-  default     = "mydb"
+  default     = "fp_db"
+}
+
+variable "rds_username" {
+  description = "Username for the RDS instance or Aurora cluster"
+  type        = string
+  default     = "fpuser"
 }
 
 variable "rds_use_aurora" {

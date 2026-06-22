@@ -1,0 +1,59 @@
+name: "Terraform CI"
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  terraform-quality-gates:
+    name: "Validate, Lint & Secure"
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Install the specific version of Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.8.0" # Adjust to your matching version
+
+      # 3. Check code formatting standard (Fails if code is unformatted)
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      # 4. Initialize Terraform to download providers (Required for validation)
+      - name: Terraform Init
+        run: terraform init -backend=false
+
+      # 5. Validate syntax and basic structure
+      - name: Terraform Validate
+        run: terraform validate
+
+      # 6. Setup TFLint for advanced logic linting
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: "latest"
+
+      # 7. Initialize and run TFLint
+      - name: Run TFLint
+        run: |
+          tflint --init
+          tflint -f compact
+
+      # 8. Run Security Scan using Aqua Security Trivy (Replaces deprecated tfsec)
+      - name: Run Trivy IaC Security Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'config'
+          hide-discarded-keyvalue: true
+          exit-code: '1' # Fails the build if vulnerabilities are found
+          severity: 'CRITICAL,HIGH'

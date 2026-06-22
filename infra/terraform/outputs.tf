@@ -104,6 +104,11 @@ output "rds_engine" {
   value       = module.rds.rds_engine
 }
 
+output "rds_host" {
+  description = "Primary endpoint for connecting to the database (writer endpoint for Aurora)."
+  value       = module.rds.rds_host
+}
+
 output "rds_security_group_id" {
   description = "Security Group ID attached to the database. Used for controlling inbound access."
   value       = module.rds.rds_security_group_id

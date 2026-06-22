@@ -5,7 +5,7 @@ applications:
     source:
       repoURL: https://github.com/antmuraha/goit-devops.git
       path: gitops/django-app
-      targetRevision: lesson-11
+      targetRevision: final-project
     destination:
       server: https://kubernetes.default.svc
       namespace: djangoapp

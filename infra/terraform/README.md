@@ -78,7 +78,7 @@ terraform apply
 ```bash
 aws eks update-kubeconfig \
   --region us-east-1 \
-  --name lesson-11-eks \
+  --name lesson-fp-eks \
   --kubeconfig ./kubeconfig
 ```
 
@@ -183,5 +183,5 @@ If Terraform resources already exist, import them into state:
 
 ```bash
 terraform import module.s3_backend.aws_s3_bucket.terraform_state goit-terraform-state-bucket
-terraform import module.ecr.aws_ecr_repository.this lesson-11-ecr
+terraform import module.ecr.aws_ecr_repository.this lesson-fp-ecr
 ```
